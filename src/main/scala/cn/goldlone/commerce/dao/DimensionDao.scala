@@ -49,6 +49,11 @@ class DimensionDao {
         val browser = dimension.asInstanceOf[DimensionBrowser]
         args = Array(browser.name, browser.version)
 
+      case _: DimensionKpi =>       // Kpi维度
+        sqls = this.buildKpiSql()
+        val kpi = dimension.asInstanceOf[DimensionKpi]
+        args = Array(kpi.name)
+
       case _: DimensionLocation =>  // 地域维度
         sqls = this.buildLocationSql()
         val location = dimension.asInstanceOf[DimensionLocation]
@@ -59,7 +64,7 @@ class DimensionDao {
         val os = dimension.asInstanceOf[DimensionOs]
         args = Array(os.name, os.version)
         
-      case _ => throw new Exception("不支持查询该纬度类型id")
+      case _ => throw new Exception("不支持查询该维度类型id")
     }
     
     // 在数据库中查询
@@ -110,6 +115,21 @@ class DimensionDao {
         val browser = dimension.asInstanceOf[DimensionBrowser]
         sb.append("browser_dimension").append(browser.name)
             .append(browser.version)
+
+      case _: DimensionKpi =>
+        val kpi = dimension.asInstanceOf[DimensionKpi]
+        sb.append("kpi_dimension").append(kpi.name)
+
+      case _: DimensionOs =>
+        val os = dimension.asInstanceOf[DimensionOs]
+        sb.append("os_dimension").append(os.name)
+            .append(os.version)
+
+      case _: DimensionLocation =>
+        val location = dimension.asInstanceOf[DimensionLocation]
+        sb.append("location_dimension").append(location.country)
+            .append(location.province).append(location.city)
+        
       case _ => throw new Exception("无法创建指定dimension的cachekey: " + dimension.getClass)
     }
     
@@ -164,6 +184,20 @@ class DimensionDao {
         "from dimension_platform " +
         "where platform_name=?"
     val insertSql = "insert into dimension_platform(platform_name) values(?)"
+    
+    Array(querySql, insertSql)
+  }
+  
+  
+  /**
+    * 构建 kpi dimension 相关SQL
+    * @return
+    */
+  def buildKpiSql(): Array[String] = {
+    val querySql = "select id " +
+        "from dimension_kpi " +
+        "where kpi_name=?"
+    val insertSql = "insert into dimension_kpi(kpi_name) values(?)"
     
     Array(querySql, insertSql)
   }
