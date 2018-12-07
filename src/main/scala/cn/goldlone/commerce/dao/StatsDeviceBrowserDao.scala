@@ -247,4 +247,35 @@ class StatsDeviceBrowserDao {
   
   }
   
+  
+  /**
+    * 添加pv数量
+    * @param dimensionDateId 日期维度id
+    * @param dimensionBrowserId 浏览器维度id
+    * @param dimensionPlatformId 平台维度id
+    * @param pageViewCount pv数量
+    */
+  def addPageViewCount(dimensionDateId: Int,
+                       dimensionBrowserId: Int,
+                       dimensionPlatformId: Int,
+                       pageViewCount: Int): Unit = {
+    val querySql = queryExistsSql
+    val updateSql = "update stats_device_browser " +
+        "set pv = pv + ? " +
+        "where date_dimension_id=? and " +
+        "   platform_dimension_id=? and " +
+        "   browser_dimension_id=?"
+    val insertSql = "insert " +
+        "into stats_device_browser(date_dimension_id, " +
+        "   platform_dimension_id, browser_dimension_id, " +
+        "   pv, created) " +
+        "values(?, ?, ?, ?, now())"
+  
+    val queryArgs = Array[Any](dimensionDateId, dimensionPlatformId, dimensionBrowserId)
+    val updateArgs = Array[Any](pageViewCount, dimensionDateId, dimensionPlatformId, dimensionBrowserId)
+    val insertArgs = Array[Any](dimensionDateId, dimensionPlatformId, dimensionBrowserId, pageViewCount)
+  
+    dbUtil.existsUpdateElseInsert(List(querySql, updateSql, insertSql), List(queryArgs, updateArgs, insertArgs))
+  }
+  
 }

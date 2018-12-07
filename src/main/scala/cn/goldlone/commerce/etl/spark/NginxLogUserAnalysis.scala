@@ -66,8 +66,8 @@ object NginxLogUserAnalysis {
     // 3. 活跃会员数量               pageView   memberId去重总数
     // 4. 新增会员数量及总会员数量     launch     memberId去重总数
     // 5. session数量               所有事件    session去重总数
-    // 6. session总长度             所有事件    session不去重总长度和
-    
+    // 6. session总长度             所有事件    同一Session的最大时差
+    // 7. pv统计                    pageView   求和
     
     
     /** 1. 统计活跃用户 */
@@ -298,6 +298,36 @@ object NginxLogUserAnalysis {
         sessionCount, sessionLength)
     })
     
+    
+    /** 7. PageView事件统计 */
+    pageViewEventRdd.map(item => {
+      val time = TimeUtils.parseLong2String(item(EventLogConstants.LOG_SERVER_TIME).toLong)
+      val browserName = item(EventLogConstants.LOG_BROWSER_NAME)
+      val browserVersion = item(EventLogConstants.LOG_BROWSER_VERSION)
+      val platform = item(EventLogConstants.LOG_PLATFORM)
+  
+      // ((时间_天, 浏览器名称, 浏览器版本, 平台), 1)
+      ((time, browserName, browserVersion, platform), 1)
+    }).reduceByKey(_ + _).collect().foreach(item => {
+      val ids = getDimensionIds(item._1)
+  
+      // 时间维度id
+      val dimensionDateId = ids._1
+      // 浏览器维度id
+      val dimensionBrowserId = ids._3
+      // 平台维度id
+      val dimensionPlatformId = ids._4
+  
+      // pageView事件数
+      val pv = item._2
+      
+      println(s"【PV统计】 => 日期: $dimensionDateId, 浏览器: $dimensionBrowserId, 平台: $dimensionPlatformId, PV总数: $pv")
+  
+      // 将统计结果写入数据库
+      // 时间-浏览器-平台 维度
+      statsDeviceBrowserDao.addPageViewCount(dimensionDateId, dimensionBrowserId,
+        dimensionPlatformId, pv)
+    })
     
     
   
