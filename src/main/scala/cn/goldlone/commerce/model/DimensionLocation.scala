@@ -14,6 +14,12 @@ class DimensionLocation extends BaseDimension {
   
   var city: String = _
   
+  def this(country: String, province: String, city: String) {
+    this()
+    this.country = country
+    this.province = province
+    this.city = city
+  }
   
   
   
