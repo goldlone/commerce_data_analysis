@@ -24,10 +24,9 @@ object NginxLogUserAnalysis {
     val sparkConf = new SparkConf().setAppName("nginx-analysis").setMaster("local[*]")
     val sc = new SparkContext(sparkConf)
     
-    val conf = new Configuration()
-    conf.set("fs.defaultFS", "hdfs://hh:9000")
-    val fs = FileSystem.get(conf)
-    
+//    val conf = new Configuration()
+//    conf.set("fs.defaultFS", "hdfs://hh:9000")
+//    val fs = FileSystem.get(conf)
 //    val fileStatuses = fs.listStatus(new Path("/data/commerce/nginx/2018/12"))
 //    for(status <- fileStatuses) {
 //      val path = status.getPath.toString
@@ -256,7 +255,7 @@ object NginxLogUserAnalysis {
   
   
   
-    /** 5. 统计Session数量 */
+    /** 5. 统计Session数量和时长 */
     accessRdd.map(item => {
       val sessionId = item(EventLogConstants.LOG_SESSION_ID)
       

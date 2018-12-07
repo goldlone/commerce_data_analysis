@@ -10,7 +10,7 @@ class StatsUserDao {
   
   val dbUtil = new DBUtil()
   
-  private val queryExistsSql = "select total_install_users " +
+  private val queryExistsSql = "select * " +
       "from stats_user " +
       "where date_dimension_id=? and " +
       "   platform_dimension_id=? "

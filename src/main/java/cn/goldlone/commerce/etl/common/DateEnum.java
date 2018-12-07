@@ -6,7 +6,7 @@ package cn.goldlone.commerce.etl.common;
  *
  */
 public enum DateEnum {
-	
+
 	YEAR("year"),
 	SEASON("season"),
 	MONTH("month"),
