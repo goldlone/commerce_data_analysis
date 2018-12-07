@@ -8,9 +8,9 @@ public enum EventEnum {
   LAUNCH(1, "launch event", "e_l"),
   PAGE_VIEW(2, "page view event", "e_pv"),
   CHARGE_REQUEST(3, "charge request event", "e_crt"),
-  CHARGE_SUCCESS(4, "charge success event", ""),
-  CHARGE_REFUSE(5, "charge event refuse", ""),
-  EVENT(6, "event", "");
+  CHARGE_SUCCESS(4, "charge success event", "e_cs"),
+  CHARGE_REFUSE(5, "charge event refuse", "e_cr"),
+  EVENT(6, "event", "e");
 
   private int value;
 

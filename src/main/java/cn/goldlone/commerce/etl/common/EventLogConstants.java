@@ -65,16 +65,16 @@ public class EventLogConstants {
   public static final String LOG_CURRENT_TITLE = "tt";
 
   // Event事件的Category名称
-  public static final String LOG_CATEGORY = "ca";
+  public static final String LOG_EVENT_CATEGORY = "ca";
 
   // Event事件的action名称
-  public static final String LOG_ACTION = "ac";
+  public static final String LOG_EVENT_ACTION = "ac";
 
   // Event事件的自定义属性
-  public static final String LOG_EVENT_PROPERTY = "kv_*";
+  public static final String LOG_EVENT_PROPERTIES = "kv_*";
 
   // Event事件的持续时间
-  public static final String LOG_DURATION = "du";
+  public static final String LOG_EVENT_DURATION = "du";
 
   // 订单id
   public static final String LOG_ORDER_ID = "oid";
