@@ -17,7 +17,7 @@ import scala.collection.mutable.ListBuffer
   * 分析nginx日志
   * @author Created by CN on 2018/12/4/0004 12:33 .
   */
-object NginxLogUserAnalysis {
+object UserAnalysisDay {
   
   def main(args: Array[String]): Unit = {
   
