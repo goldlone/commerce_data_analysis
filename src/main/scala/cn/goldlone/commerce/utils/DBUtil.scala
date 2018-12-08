@@ -218,7 +218,7 @@ object DBUtil {
     */
   def releaseResource() = {
     val thread = new Thread(new CloseRunnable)
-    thread.setDaemon(true)
+//    thread.setDaemon(true)
     thread.start()
   }
   

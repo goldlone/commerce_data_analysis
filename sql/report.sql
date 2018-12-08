@@ -312,7 +312,7 @@ CREATE TABLE `stats_user` (
 DROP TABLE IF EXISTS `stats_view_depth`;
 CREATE TABLE `stats_view_depth` (
   `platform_dimension_id` int(11) NOT NULL DEFAULT '0',
-  `data_dimension_id` int(11) NOT NULL DEFAULT '0',
+  `date_dimension_id` int(11) NOT NULL DEFAULT '0',
   `kpi_dimension_id` int(11) NOT NULL DEFAULT '0',
   `pv1` int(11) DEFAULT '0',
   `pv2` int(11) DEFAULT '0',

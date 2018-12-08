@@ -1,11 +1,9 @@
 package cn.goldlone.commerce.etl.spark
 
-import java.net.URLDecoder
-import java.text.SimpleDateFormat
-import java.util.Locale
-
 import cn.goldlone.commerce.etl.common.EventLogConstants
-import cn.goldlone.commerce.etl.utils.{IP2RegionUtil, LogUtil, UserAgentUtil}
+import cn.goldlone.commerce.etl.utils.LogUtil
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -23,9 +21,16 @@ object NginxLog2HDFS {
     val sc = new SparkContext(conf)
     System.setProperty("user.name", "hadoop")
     System.setProperty("HADOOP_USER_NAME", "hadoop")
+    
+    val hadoopConf = new Configuration()
+    hadoopConf.set("fs.defaultFS", "hdfs://hh:9000")
+    val fs = FileSystem.get(hadoopConf)
 
     val inPath = "hdfs://hh:9000/data/commerce/nginx/2018/12/05"
     val outPath = "hdfs://hh:9000/data/commerce/etl/2018/12/05"
+  
+    // 删除输出目录
+    fs.delete(new Path(outPath), true)
   
     // 读取日志信息
     val logRdd = sc.textFile(inPath)

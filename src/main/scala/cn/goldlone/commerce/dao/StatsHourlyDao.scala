@@ -6,7 +6,7 @@ import cn.goldlone.commerce.utils.DBUtil
   *
   * @author Created by CN on 2018/12/7/0007 9:43 .
   */
-class StatsHourly {
+class StatsHourlyDao {
   
   
   val dbUtil = new DBUtil()

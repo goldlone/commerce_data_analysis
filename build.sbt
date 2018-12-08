@@ -39,3 +39,5 @@ libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.46"
 libraryDependencies += "org.apache.hbase" % "hbase-common" % "1.2.8"
 libraryDependencies += "org.apache.hbase" % "hbase-client" % "1.2.8"
 libraryDependencies += "org.apache.hbase" % "hbase-server" % "1.2.8"
+
+libraryDependencies += "org.apache.spark" %% "spark-hive" % "1.6.0-cdh5.13.2"
