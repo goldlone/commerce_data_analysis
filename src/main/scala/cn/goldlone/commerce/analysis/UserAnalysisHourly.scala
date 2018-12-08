@@ -1,6 +1,6 @@
-package cn.goldlone.commerce.etl.spark
+package cn.goldlone.commerce.analysis
 
-import cn.goldlone.commerce.dao.{DimensionDao, StatsHourly}
+import cn.goldlone.commerce.dao.{DimensionDao, StatsHourlyDao}
 import cn.goldlone.commerce.etl.common.{DateEnum, EventEnum, EventLogConstants, KpiEnum}
 import cn.goldlone.commerce.etl.utils.{LogUtil, TimeUtils}
 import cn.goldlone.commerce.model.{DimensionDate, DimensionKpi, DimensionPlatform}
@@ -31,7 +31,7 @@ object UserAnalysisHourly {
     
     // 数据操作相关类
     val dimensionDao = new DimensionDao()
-    val statsHourly = new StatsHourly()
+    val statsHourlyDao = new StatsHourlyDao()
     
     // 解析日志信息
     val accessRdd: RDD[mutable.HashMap[String, String]] = logRdd.map(LogUtil.handleLog).filter(_ != null).cache()
@@ -91,7 +91,7 @@ object UserAnalysisHourly {
       val dimensionKpiId = ids._3
       
       // 将统计数据写入数据库
-      statsHourly.addKpiCount(dimensionDateId, dimensionPlatformId, dimensionKpiId, item._2)
+      statsHourlyDao.addKpiCount(dimensionDateId, dimensionPlatformId, dimensionKpiId, item._2)
     })
   
     
@@ -180,7 +180,7 @@ object UserAnalysisHourly {
       val dimensionKpiId = ids._3
   
       // 将统计数据写入数据库
-      statsHourly.addKpiCount(dimensionDateId, dimensionPlatformId, dimensionKpiId, item._2)
+      statsHourlyDao.addKpiCount(dimensionDateId, dimensionPlatformId, dimensionKpiId, item._2)
     }
   
     sc.stop()

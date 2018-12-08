@@ -1,17 +1,14 @@
-package cn.goldlone.commerce.etl.spark
+package cn.goldlone.commerce.analysis
 
 import cn.goldlone.commerce.dao.{DimensionDao, StatsDeviceBrowserDao, StatsUserDao}
 import cn.goldlone.commerce.etl.common.{DateEnum, EventEnum, EventLogConstants}
 import cn.goldlone.commerce.etl.utils.{LogUtil, TimeUtils}
 import cn.goldlone.commerce.model.{DimensionBrowser, DimensionDate, DimensionPlatform}
 import cn.goldlone.commerce.utils.DBUtil
-import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
 
 /**
   * 分析nginx日志

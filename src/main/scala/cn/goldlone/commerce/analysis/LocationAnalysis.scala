@@ -1,4 +1,4 @@
-package cn.goldlone.commerce.etl.spark
+package cn.goldlone.commerce.analysis
 
 import cn.goldlone.commerce.dao.{DimensionDao, StatsDeviceLocationDao}
 import cn.goldlone.commerce.etl.common.{DateEnum, EventEnum, EventLogConstants}
@@ -8,7 +8,6 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
 
 /**
   * 地域信息信息模块
