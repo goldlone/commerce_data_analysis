@@ -164,3 +164,229 @@ group by event_category,event_action;
 -- ==============
 
 
+
+-- =====================
+-- 分析订单相关数据(日期、平台、货币类型、支付方式)
+--
+-- select * from access_log where event='e_crt'; -- 13
+-- select * from access_log where event='e_cs'; -- 8
+-- select * from access_log where event='e_cr'; -- 4
+--
+-- -- 日期: from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd') date
+-- -- 平台: platform
+-- -- 货币类型: currency_type
+-- -- 支付方式: payment_type
+--
+-- -- 分析订单数量及金额: charge_request事件的  去重后并统计总金额
+-- drop table if exists commerce.tmp_order_request_count;
+-- create table commerce.tmp_order_request_count
+-- as
+-- select from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd') date,
+--     platform,
+--     currency_type,
+--     payment_type,
+--     count(1) order_request_count,
+--     sum(cast(currency_amount as int)) order_request_currency_sum
+-- from (select order_id, event,
+--         row_number() over(partition by order_id
+--                           order by server_time desc) no
+--     from commerce.access_log
+--     where event='e_crt') t1
+-- left join commerce.access_log t2
+--     on t1.order_id = t2.order_id and
+--        t1.event = t2.event
+-- where t1.no=1
+-- group by from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd'),
+--     platform,
+--     currency_type,
+--     payment_type;
+--
+--
+-- -- 分析成功订单数量及金额: charge_success事件的 去重后并统计总金额
+-- drop table if exists commerce.tmp_order_success_count;
+-- create table commerce.tmp_order_success_count
+-- as
+-- select from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd') date,
+--     platform,
+--     currency_type,
+--     payment_type,
+--     count(1) order_success_order_count,
+--     sum(cast(currency_amount as int)) order_success_currency_sum
+-- from (select order_id, event,
+--         row_number() over(partition by order_id
+--                           order by server_time desc) no
+--     from commerce.access_log
+--     where event='e_cs') t1
+-- left join commerce.access_log t2
+--     on t1.order_id = t2.order_id and
+--        t1.event = t2.event
+-- where t1.no=1
+-- group by from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd'),
+--     platform,
+--     currency_type,
+--     payment_type;
+--
+--
+-- -- 分析退款订单数量及金额: charge_refuse事件的 去重后并统计总金额
+-- drop table if exists commerce.tmp_order_refund_count;
+-- create table commerce.tmp_order_refund_count
+-- as
+-- select from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd') date,
+--     platform,
+--     currency_type,
+--     payment_type,
+--     count(1) order_refund_order_count,
+--     sum(cast(currency_amount as int)) order_refund_currency_sum
+-- from (select order_id, event,
+--         row_number() over(partition by order_id
+--                           order by server_time desc) no
+--     from commerce.access_log
+--     where event='e_cr') t1
+-- left join commerce.access_log t2
+--     on t1.order_id = t2.order_id and
+--        t1.event = t2.event
+-- where t1.no=1
+-- group by from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd'),
+--     platform,
+--     currency_type,
+--     payment_type;
+--
+
+
+
+
+
+
+-- select t1.order_id,t1.date,--
+--     t2.platform,
+--     t2.currency_type,
+--     t2.payment_type,
+--     coun-- t(1) order_success_order_count,
+--     sum(cast(t2.currency_amount as int)) order_success_currency_sum
+-- from (select order_id,
+--         from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd') date,
+--         row_number() over(partition by order_id
+--                           order by server_time desc) no
+--     from commerce.access_log
+--     where event='e_cs') t1
+-- left join (select distinct(order_id),platform,currency_type,payment_type from commerce.access_log where event='e_crt') t2
+--     on t1.order_id = t2.order_id
+-- where t1.no=1
+-- group by t1.order_id,t1.date,
+--     t2.platform,
+--     t2.currency_type,
+--     t2.payment_type;
+
+    
+
+-- 准备表
+-- 1. 去重后的 charge request 信息
+drop table if exists tmp_charge_request_unique_order;
+create table tmp_charge_request_unique_order
+as
+select distinct(order_id),
+    platform,
+    currency_type,
+    payment_type,
+    currency_amount,
+    from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd') date 
+from commerce.access_log 
+where event='e_crt';
+  
+  
+-- 一、 charge request 信息
+drop table if exists order_request;
+create table order_request
+as
+select date,
+    platform,
+    currency_type,
+    payment_type,
+    count(1) order_request_order_count,
+    sum(cast(currency_amount as int)) order_request_currency_sum
+from tmp_charge_request_unique_order
+group by date,
+    platform,
+    currency_type,
+    payment_type;
+
+
+
+-- 二、 charge success 信息
+-- 1. 去重后的charge success 订单编号
+drop table if exists tmp_charge_success_unique_order;
+create table tmp_charge_success_unique_order
+as
+select distinct(order_id), from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd') date
+from commerce.access_log 
+where event='e_cs';
+
+-- 2. 拼接计算金额
+drop table if exists order_success;
+create table order_success
+as
+select t1.date,
+    t2.platform,
+    t2.currency_type,
+    t2.payment_type,
+    count(1) order_success_order_count,
+    sum(cast(t2.currency_amount as int)) order_success_currency_sum
+from tmp_charge_success_unique_order t1
+inner join tmp_charge_request_unique_order t2 on t1.order_id = t2.order_id
+group by t1.date,
+    t2.platform,
+    t2.currency_type,
+    t2.payment_type;
+    
+-- 三、 charge refund 信息
+-- 1. 去重后的charge refund 订单编号
+drop table if exists tmp_charge_refund_unique_order;
+create table tmp_charge_refund_unique_order
+as
+select distinct(order_id), from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd') date
+from commerce.access_log 
+where event='e_cr';
+
+-- 2. 拼接计算金额
+drop table if exists order_refund;
+create table order_refund
+as
+select t1.date,
+    t2.platform,
+    t2.currency_type,
+    t2.payment_type,
+    count(1) order_refund_order_count,
+    sum(cast(t2.currency_amount as int)) order_refund_currency_sum
+from tmp_charge_refund_unique_order t1
+inner join tmp_charge_request_unique_order t2 on t1.order_id = t2.order_id
+group by t1.date,
+    t2.platform,
+    t2.currency_type,
+    t2.payment_type;
+
+
+    
+    
+    
+
+    
+    
+    
+    
+-- 同样的任务需要5个job
+select t1.order_id,t1.date,
+    t2.platform,
+    t2.currency_type,
+    t2.payment_type,
+    count(1) order_success_order_count,
+    sum(cast(t2.currency_amount as int)) order_success_currency_sum
+from (select distinct(order_id), from_unixtime(cast(server_time/1000 as bigint), 'yyyy-MM-dd') date
+    from commerce.access_log 
+    where event='e_cs') t1
+left join (select distinct(order_id),platform,currency_type,payment_type,currency_amount from commerce.access_log where event='e_crt') t2 
+    on t1.order_id = t2.order_id
+group by t1.order_id,t1.date,
+    t2.platform,
+    t2.currency_type,
+    t2.payment_type;
+

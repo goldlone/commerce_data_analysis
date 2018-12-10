@@ -4,5 +4,6 @@ target
 *.iws
 *.iml
 *.ipr
-GeoLite2-City.mmdb
 src/test/
+
+derby.log

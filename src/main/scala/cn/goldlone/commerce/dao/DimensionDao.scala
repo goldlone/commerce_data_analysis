@@ -1,6 +1,6 @@
 package cn.goldlone.commerce.dao
 
-import cn.goldlone.commerce.model._
+import cn.goldlone.commerce.model.{DimensionPaymentType, _}
 import cn.goldlone.commerce.utils.DBUtil
 
 import scala.collection.mutable
@@ -63,6 +63,16 @@ class DimensionDao {
         sqls = this.buildOsSql()
         val os = dimension.asInstanceOf[DimensionOs]
         args = Array(os.name, os.version)
+
+      case _: DimensionCurrencyType => // 支付货币类型
+        sqls = this.buildCurrencyTypeSql()
+        val currencyType = dimension.asInstanceOf[DimensionCurrencyType]
+        args = Array(currencyType.name)
+        
+      case _: DimensionPaymentType =>  // 支付方式类型
+        sqls = this.buildPaymentTypeSql()
+        val paymentType = dimension.asInstanceOf[DimensionPaymentType]
+        args = Array(paymentType.name)
         
       case _ => throw new Exception("不支持查询该维度类型id")
     }
@@ -130,7 +140,15 @@ class DimensionDao {
         sb.append("location_dimension").append(location.country)
             .append(location.province).append(location.city)
         
-      case _ => throw new Exception("无法创建指定dimension的cachekey: " + dimension.getClass)
+      case _: DimensionCurrencyType =>
+        val currencyType = dimension.asInstanceOf[DimensionCurrencyType]
+        sb.append("currency_type_dimension").append(currencyType.name)
+        
+      case _: DimensionPaymentType =>
+        val paymentType = dimension.asInstanceOf[DimensionPaymentType]
+        sb.append("payment_type_dimension").append(paymentType.name)
+        
+      case _ => throw new Exception("无法创建指定dimension的cacheKey: " + dimension.getClass)
     }
     
     sb.toString
@@ -228,6 +246,34 @@ class DimensionDao {
         "from dimension_os " +
         "where os_name=? and os_version=?"
     val insertSql = "insert into dimension_os(os_name, os_version) values(?, ?)"
+    
+    Array(querySql, insertSql)
+  }
+  
+  
+  /**
+    * 构建 currency type dimension 相关SQL
+    * @return
+    */
+  def buildCurrencyTypeSql(): Array[String] = {
+    val querySql = "select id " +
+        "from dimension_currency_type " +
+        "where currency_name=? "
+    val insertSql = "insert into dimension_currency_type(currency_name) values(?)"
+    
+    Array(querySql, insertSql)
+  }
+  
+  
+  /**
+    * 构建 payment type dimension 相关SQL
+    * @return
+    */
+  def buildPaymentTypeSql(): Array[String] = {
+    val querySql = "select id " +
+        "from dimension_payment_type " +
+        "where payment_type=?"
+    val insertSql = "insert into dimension_payment_type(payment_type) values(?)"
     
     Array(querySql, insertSql)
   }
