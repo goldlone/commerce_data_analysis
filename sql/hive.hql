@@ -41,7 +41,8 @@ load data inpath '/data/commerce/etl/2018/12/05' into table access_log;
 
 
 -- 外部分区表
-create external table if not exists log1(
+drop table if exists logs;
+create external table if not exists logs(
 ip string,
 server_time bigint,
 event string,
@@ -79,7 +80,6 @@ stored as textfile;
 -- 导入分区数据
 alter table log1 add partition(year='2018', month='12', day='05') location 'hdfs://hh:9000/data/commerce/etl/2018/12/05';
 alter table log1 add partition(year='2018', month='12', day='06') location 'hdfs://hh:9000/data/commerce/etl/2018/12/06';
-
 
 -- 1. 用户浏览深度分析 => 根据时间，平台，KPI（用户|Session）分组，统计pageView的个数
 -- 1.1 用户维度:

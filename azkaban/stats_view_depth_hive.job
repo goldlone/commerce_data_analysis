@@ -1,0 +1,9 @@
+type=command
+
+dependencies=load
+
+year=${azkaban.flow.start.year}
+month=${azkaban.flow.start.month}
+day=$(${azkaban.flow.start.day} - 1)
+
+command=/app/cdh/hive-1.1.0-cdh5.13.2/bin/hive -hiveconf year=${year} -hiveconf month=${month} -hiveconf day=${day} -f /home/hadoop/commerce/stats_view_depth.hql

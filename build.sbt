@@ -6,14 +6,15 @@ scalaVersion := "2.10.7"
 
 resolvers ++= Seq(
   "cloudera" at "https://repository.cloudera.com/content/repositories/releases/",
-  "alibaba" at "http://maven.aliyun.com/nexus/content/groups/public/"
+  "alibaba" at "http://maven.aliyun.com/nexus/content/groups/public/",
+  "spring" at "http://repo.spring.io/plugins-release/"
 )
 
 // Spark-Core
-libraryDependencies += "org.apache.spark" %% "spark-core" % "1.6.0-cdh5.13.2" exclude("javax.servlet", "*") exclude("com.fasterxml.jackson.core", "*") exclude("com.fasterxml.jackson.module", "jackson-module-scala_2.10")
+libraryDependencies += "org.apache.spark" %% "spark-core" % "1.6.0-cdh5.13.2" /*% "provided"*/ exclude("javax.servlet", "*") exclude("com.fasterxml.jackson.core", "*") exclude("com.fasterxml.jackson.module", "jackson-module-scala_2.10")
 
 // Spark-Sql
-libraryDependencies += "org.apache.spark" %% "spark-sql" % "1.6.0-cdh5.13.2" exclude("javax.servlet", "*")
+libraryDependencies += "org.apache.spark" %% "spark-sql" % "1.6.0-cdh5.13.2" /*% "provided"*/ exclude("javax.servlet", "*")
 
 
 // 解析IP地域
@@ -32,12 +33,11 @@ libraryDependencies += "cz.mallat.uasparser" % "uasparser" % "0.6.2"
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.46"
 
 
-//libraryDependencies += "org.apache.hive" % "hive-exec" % "1.1.0-cdh5.13.2"
-
-
 // 集成Hbase
 libraryDependencies += "org.apache.hbase" % "hbase-common" % "1.2.8"
 libraryDependencies += "org.apache.hbase" % "hbase-client" % "1.2.8"
 libraryDependencies += "org.apache.hbase" % "hbase-server" % "1.2.8"
 
-libraryDependencies += "org.apache.spark" %% "spark-hive" % "1.6.0-cdh5.13.2"
+libraryDependencies += "org.apache.spark" %% "spark-hive" % "1.6.0-cdh5.13.2" // % "provided"
+
+libraryDependencies += "org.apache.hive" % "hive-exec" % "1.1.0-cdh5.13.2"// % "provided"

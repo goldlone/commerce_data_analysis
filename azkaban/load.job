@@ -1,0 +1,10 @@
+type=command
+
+dependencies=etl
+
+year=${azkaban.flow.start.year}
+month=${azkaban.flow.start.month}
+day=$(${azkaban.flow.start.day} - 1)
+
+command=hive -e "alter table commerce.logs add partition(year=${year}, month=${month}, day=${day}) location 'hdfs://hh:9000/data/commerce/etl/${year}/${month}/${day}'"
+

@@ -1,7 +1,9 @@
 package cn.goldlone.commerce.etl.spark
 
+import java.text.SimpleDateFormat
+
 import cn.goldlone.commerce.etl.common.EventLogConstants
-import cn.goldlone.commerce.etl.utils.LogUtil
+import cn.goldlone.commerce.etl.utils.{LogUtil, TimeUtils}
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.rdd.RDD
@@ -17,8 +19,6 @@ object NginxLog2HDFS {
 
   def main(args: Array[String]): Unit = {
 
-    val conf = new SparkConf().setMaster("local[*]").setAppName("nginx-log-etl-hdfs")
-    val sc = new SparkContext(conf)
     System.setProperty("user.name", "hadoop")
     System.setProperty("HADOOP_USER_NAME", "hadoop")
     
@@ -26,12 +26,43 @@ object NginxLog2HDFS {
     hadoopConf.set("fs.defaultFS", "hdfs://hh:9000")
     val fs = FileSystem.get(hadoopConf)
 
-    val inPath = "hdfs://hh:9000/data/commerce/nginx/2018/12/05"
-    val outPath = "hdfs://hh:9000/data/commerce/etl/2018/12/05"
+    var date: String = null
+
+    for(i <- args.indices) {
+      if(args(i).equals("-d")) {
+        if(i+1 < args.length)
+        date = args(i+1)
+      }
+    }
+    
+    if(date == null) {
+      date = TimeUtils.getYesterday("yyyy-MM-dd")
+    }
+    
+    val sdf1 = new SimpleDateFormat("yyyy-MM-dd")
+    val sdf2 = new SimpleDateFormat("yyyy/MM/dd")
+    date = sdf2.format(sdf1.parse(date))
+    
+    val inPath = "hdfs://hh:9000/data/commerce/nginx/" + date
+    val outPath = "hdfs://hh:9000/data/commerce/etl/" + date
+    
+    println(s"输入路径: $inPath")
+    println(s"输出路径: $outPath")
   
+    // 检测输入目录是否存在
+    if(!fs.exists(new Path(inPath))) {
+      println("输入目录不存在...")
+      System.exit(1)
+    }
+    
     // 删除输出目录
     fs.delete(new Path(outPath), true)
   
+    // 初始化SparkContext
+//    val conf = new SparkConf().setMaster("local[*]").setAppName("nginx-log-etl-hdfs")
+    val conf = new SparkConf().setAppName("nginx-log-etl-hdfs")
+    val sc = new SparkContext(conf)
+    
     // 读取日志信息
     val logRdd = sc.textFile(inPath)
     // 解析日志信息

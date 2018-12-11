@@ -1,0 +1,9 @@
+/app/cdh/sqoop-1.4.6-cdh5.13.2/bin/sqoop export \
+--connect jdbc:mysql://hh:3306/report \
+--username hive \
+--password 123456 \
+--table stats_view_depth \
+--export-dir /user/hive/warehouse/commerce.db/stats_view_depth \
+--input-fields-terminated-by "\\01" \
+--update-mode allowinsert \
+--update-key platform_dimension_id,date_dimension_id,kpi_dimension_id;

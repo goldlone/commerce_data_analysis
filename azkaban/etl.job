@@ -1,0 +1,7 @@
+type=command
+
+year=${azkaban.flow.start.year}
+month=${azkaban.flow.start.month}
+day=$(${azkaban.flow.start.day} - 1)
+
+command=/app/cdh/spark-1.6.0-cdh5.13.2/bin/spark-submit --master yarn-client --class cn.goldlone.commerce.etl.spark.NginxLog2HDFS /home/hadoop/commerce_platform_data_analysis.jar -d ${year}-${month}-${day}

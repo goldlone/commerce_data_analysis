@@ -1,5 +1,6 @@
 package cn.goldlone.commerce.model
 
+import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 
 import cn.goldlone.commerce.etl.common.DateEnum
@@ -28,19 +29,7 @@ class DimensionDate extends BaseDimension {
   
   def this(timestamp: Long, dateType: DateEnum) {
     this()
-    val cal = Calendar.getInstance()
-    cal.setTimeInMillis(timestamp)
-    this.year = cal.get(Calendar.YEAR)
-    this.month = cal.get(Calendar.MONTH)
-    if(this.month % 3 == 0)
-      this.season = this.month / 3
-    else
-      this.season = this.month / 3 + 1
-    
-    this.week = cal.get(Calendar.WEEK_OF_YEAR)
-    this.day = cal.get(Calendar.DAY_OF_MONTH)
-    this.calendar = cal.getTime
-    this.dateType = dateType
+    init(timestamp, dateType)
   }
   
   def this(year:Int, season:Int, month:Int, week:Int, day:Int, calendar:Date, dateType:DateEnum) {
@@ -51,6 +40,34 @@ class DimensionDate extends BaseDimension {
     this.week = week
     this.day = day
     this.calendar = calendar
+    this.dateType = dateType
+  }
+  
+  /**
+    *
+    * @param date yyyy-MM-dd
+    */
+  def this(date: String) {
+    this()
+    val sdf = new SimpleDateFormat("yyyy-MM-dd")
+    init(sdf.parse(date).getTime, DateEnum.DAY)
+  }
+  
+  
+  def init(timestamp: Long, dateType: DateEnum): Unit = {
+  
+    val cal = Calendar.getInstance()
+    cal.setTimeInMillis(timestamp)
+    this.year = cal.get(Calendar.YEAR)
+    this.month = cal.get(Calendar.MONTH)
+    if(this.month % 3 == 0)
+      this.season = this.month / 3
+    else
+      this.season = this.month / 3 + 1
+  
+    this.week = cal.get(Calendar.WEEK_OF_YEAR)
+    this.day = cal.get(Calendar.DAY_OF_MONTH)
+    this.calendar = cal.getTime
     this.dateType = dateType
   }
   
