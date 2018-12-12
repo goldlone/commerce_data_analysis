@@ -3,11 +3,8 @@ server:
 
 spring:
   datasource:
-#    url: jdbc:mysql://39.107.251.64:3306/bigdata_platform?useSSL=false&characterEncoding=utf8
-#    username: cn
-#    password: abc.123
-    url: jdbc:mysql://127.0.0.1:3306/bigdata_platform?useSSL=false&characterEncoding=utf8
-    username: team05
+    url: jdbc:mysql://hh:3306/report?useSSL=false&characterEncoding=utf8
+    username: hive
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
   thymeleaf:
@@ -25,11 +22,11 @@ mybatis:
     map-underscore-to-camel-case: true
     use-generated-keys: true
     cache-enabled: true
-  mapper-locations: classpath:mybatis/*.xml
 
 logging:
   level:
     cn:
       goldlone:
-        bigdata_platform:
+        commerce:
           dao: DEBUG
+#  mapper-locations: classpath:mybatis/*.xml
