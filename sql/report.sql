@@ -323,5 +323,5 @@ CREATE TABLE `stats_view_depth` (
   `pv30_60` int(11) DEFAULT '0',
   `pv60+` int(11) DEFAULT '0',
   `created` date DEFAULT NULL,
-  PRIMARY KEY (`platform_dimension_id`,`data_dimension_id`,`kpi_dimension_id`)
+  PRIMARY KEY (`platform_dimension_id`,`date_dimension_id`,`kpi_dimension_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='统计用户浏览深度相关分析数据的统计表';

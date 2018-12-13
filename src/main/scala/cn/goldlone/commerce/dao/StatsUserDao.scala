@@ -111,8 +111,8 @@ class StatsUserDao {
     
     val querySql = this.queryExistsSql
     val updateSql = "update stats_user " +
-        "set total_install_users = total_install_users + ?, " +
-        "   new_install_users = new_install_users + ? " +
+        "set total_install_users = ?, " +
+        "   new_install_users = ? " +
         "where date_dimension_id=? and " +
         "   platform_dimension_id=?"
     val insertSql = "insert " +
@@ -172,8 +172,8 @@ class StatsUserDao {
     
     val querySql = queryExistsSql
     val updateSql = "update stats_user " +
-        "set total_members = total_members + ?, " +
-        "   new_members = new_members + ? " +
+        "set total_members = ?, " +
+        "   new_members = ? " +
         "where date_dimension_id=? and " +
         "   platform_dimension_id=?"
     val insertSql = "insert " +
