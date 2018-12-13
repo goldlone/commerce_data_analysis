@@ -7,41 +7,41 @@ import java.util.Date;
  */
 public class StatsViewDepth {
 
-  private Integer platform_dimension_id;
-  private Integer date_dimension_id;
-  private Integer kpi_dimension_id;
+  private Integer platformId;
+  private Integer dateId;
+  private Integer kpiId;
   private Integer pv1;
   private Integer pv2;
   private Integer pv3;
   private Integer pv4;
-  private Integer pv5_10;
-  private Integer pv10_30;
-  private Integer pv30_60;
-  private Integer pv60_plus;
-  private Date created;
+  private Integer pv5to10;
+  private Integer pv10to30;
+  private Integer pv30to60;
+  private Integer pv60plus;
 
-  public Integer getPlatform_dimension_id() {
-    return platform_dimension_id;
+
+  public Integer getPlatformId() {
+    return platformId;
   }
 
-  public void setPlatform_dimension_id(Integer platform_dimension_id) {
-    this.platform_dimension_id = platform_dimension_id;
+  public void setPlatformId(Integer platformId) {
+    this.platformId = platformId;
   }
 
-  public Integer getDate_dimension_id() {
-    return date_dimension_id;
+  public Integer getDateId() {
+    return dateId;
   }
 
-  public void setDate_dimension_id(Integer date_dimension_id) {
-    this.date_dimension_id = date_dimension_id;
+  public void setDateId(Integer dateId) {
+    this.dateId = dateId;
   }
 
-  public Integer getKpi_dimension_id() {
-    return kpi_dimension_id;
+  public Integer getKpiId() {
+    return kpiId;
   }
 
-  public void setKpi_dimension_id(Integer kpi_dimension_id) {
-    this.kpi_dimension_id = kpi_dimension_id;
+  public void setKpiId(Integer kpiId) {
+    this.kpiId = kpiId;
   }
 
   public Integer getPv1() {
@@ -76,43 +76,52 @@ public class StatsViewDepth {
     this.pv4 = pv4;
   }
 
-  public Integer getPv5_10() {
-    return pv5_10;
+  public Integer getPv5to10() {
+    return pv5to10;
   }
 
-  public void setPv5_10(Integer pv5_10) {
-    this.pv5_10 = pv5_10;
+  public void setPv5to10(Integer pv5to10) {
+    this.pv5to10 = pv5to10;
   }
 
-  public Integer getPv10_30() {
-    return pv10_30;
+  public Integer getPv10to30() {
+    return pv10to30;
   }
 
-  public void setPv10_30(Integer pv10_30) {
-    this.pv10_30 = pv10_30;
+  public void setPv10to30(Integer pv10to30) {
+    this.pv10to30 = pv10to30;
   }
 
-  public Integer getPv30_60() {
-    return pv30_60;
+  public Integer getPv30to60() {
+    return pv30to60;
   }
 
-  public void setPv30_60(Integer pv30_60) {
-    this.pv30_60 = pv30_60;
+  public void setPv30to60(Integer pv30to60) {
+    this.pv30to60 = pv30to60;
   }
 
-  public Integer getPv60_plus() {
-    return pv60_plus;
+  public Integer getPv60plus() {
+    return pv60plus;
   }
 
-  public void setPv60_plus(Integer pv60_plus) {
-    this.pv60_plus = pv60_plus;
+  public void setPv60plus(Integer pv60plus) {
+    this.pv60plus = pv60plus;
   }
 
-  public Date getCreated() {
-    return created;
-  }
-
-  public void setCreated(Date created) {
-    this.created = created;
+  @Override
+  public String toString() {
+    return "StatsViewDepth{" +
+            "platformId=" + platformId +
+            ", dateId=" + dateId +
+            ", kpiId=" + kpiId +
+            ", pv1=" + pv1 +
+            ", pv2=" + pv2 +
+            ", pv3=" + pv3 +
+            ", pv4=" + pv4 +
+            ", pv5to10=" + pv5to10 +
+            ", pv10to30=" + pv10to30 +
+            ", pv30to60=" + pv30to60 +
+            ", pv60plus=" + pv60plus +
+            '}';
   }
 }

@@ -3,10 +3,12 @@ var rootPath = "http://127.0.0.1:9003";
 var FirstPage = function() {
   this.userChart = new UserChart("user-content");
   this.locationChart = new LocationChart("location-chart");
+  this.viewDepthChart = new ViewDepthChart("view-depth");
 
   this.init = function () {
     this.userChart.render();
     this.locationChart.render();
+    this.viewDepthChart.render();
     return this;
   }
 },
@@ -116,10 +118,110 @@ UserChart = function(a) {
     });
   }
 },
+ViewDepthChart = function(a) {
+  this.elem = a;
+  this.render = function () {
+    $("#" + this.elem).height(400);
+    this.chart = echarts.init(document.getElementById(this.elem));
+    var that = this;
+    this.showChart = function(platform, chartData) {
+      console.log(chartData);
+      var option = {
+        tooltip : {
+          trigger: 'axis',
+          axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        legend: {
+          data: ["PV1", "PV2", "PV3", "PV4", "PV5-10", "PV10-30", "PV30-60", "PV60+"]
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis : [
+          {
+            type : 'value'
+          }
+        ],
+        yAxis : [
+          {
+            type : 'category',
+            data : chartData[platform].date
+          }
+        ],
+        series : [
+          {
+            name:'PV1',
+            type:'bar',
+            // stack: '活跃用户',
+            data: chartData[platform].pv1
+          },
+          {
+            name:'PV2',
+            type:'bar',
+            // stack: '活跃用户',
+            data: chartData[platform].pv2
+          },
+          {
+            name:'PV3',
+            type:'bar',
+            // stack: '活跃用户',
+            data: chartData[platform].pv3
+          },
+          {
+            name:'PV4',
+            type:'bar',
+            // stack: '活跃用户',
+            data: chartData[platform].pv4
+          },
+          {
+            name:'PV5-10',
+            type:'bar',
+            // stack: '活跃用户',
+            data: chartData[platform].pv5_10
+          },
+          {
+            name:'PV10-30',
+            type:'bar',
+            // stack: '活跃用户',
+            data: chartData[platform].pv10_30
+          },
+          {
+            name:'PV30-60',
+            type:'bar',
+            // barWidth : 5,
+            // stack: '活跃用户',
+            data: chartData[platform].pv30_60
+          },
+          {
+            name:'PV60+',
+            type:'bar',
+            stack: '活跃用户',
+            data: chartData[platform].pv60_plus
+          }
+        ]
+      };
+      this.chart.setOption(option);
+    };
+    $.ajax({
+      url: rootPath + "/viewDepth/selectAll",
+      method: "post",
+      success: function(res) {
+        if(res.code === 1001) {
+          that.showChart("website", res.data);
+        }
+      }
+    });
+  }
+},
 LocationChart = function (a) {
   this.elem = a;
   this.render = function () {
-    $("#" + this.elem).height(600);
+    $("#" + this.elem).height(800);
     this.chart = echarts.init(document.getElementById(a));
     var that = this;
     this.showChart = function(chartData) {
