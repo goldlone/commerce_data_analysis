@@ -125,7 +125,6 @@ ViewDepthChart = function(a) {
     this.chart = echarts.init(document.getElementById(this.elem));
     var that = this;
     this.showChart = function(platform, chartData) {
-      console.log(chartData);
       var option = {
         tooltip : {
           trigger: 'axis',
