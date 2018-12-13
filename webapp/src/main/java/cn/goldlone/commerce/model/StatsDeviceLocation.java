@@ -4,50 +4,49 @@ package cn.goldlone.commerce.model;
  * @author Created by CN on 2018/12/12/0012 14:57 .
  */
 public class StatsDeviceLocation {
-  private Integer date_dimension_id;
 
-  private Integer platform_dimension_id;
+  private Integer dateId;
 
-  private Integer location_dimension_id;
+  private Integer platformId;
 
-  private Integer active_users;
+  private Integer locationId;
+
+  private Integer activeUsers;
 
   private Integer sessions;
 
-  private Integer bounce_sessions;
+  private Integer bounceSessions;
 
-  private Integer created;
-
-  public Integer getDate_dimension_id() {
-    return date_dimension_id;
+  public Integer getDateId() {
+    return dateId;
   }
 
-  public void setDate_dimension_id(Integer date_dimension_id) {
-    this.date_dimension_id = date_dimension_id;
+  public void setDateId(Integer dateId) {
+    this.dateId = dateId;
   }
 
-  public Integer getPlatform_dimension_id() {
-    return platform_dimension_id;
+  public Integer getPlatformId() {
+    return platformId;
   }
 
-  public void setPlatform_dimension_id(Integer platform_dimension_id) {
-    this.platform_dimension_id = platform_dimension_id;
+  public void setPlatformId(Integer platformId) {
+    this.platformId = platformId;
   }
 
-  public Integer getLocation_dimension_id() {
-    return location_dimension_id;
+  public Integer getLocationId() {
+    return locationId;
   }
 
-  public void setLocation_dimension_id(Integer location_dimension_id) {
-    this.location_dimension_id = location_dimension_id;
+  public void setLocationId(Integer locationId) {
+    this.locationId = locationId;
   }
 
-  public Integer getActive_users() {
-    return active_users;
+  public Integer getActiveUsers() {
+    return activeUsers;
   }
 
-  public void setActive_users(Integer active_users) {
-    this.active_users = active_users;
+  public void setActiveUsers(Integer activeUsers) {
+    this.activeUsers = activeUsers;
   }
 
   public Integer getSessions() {
@@ -58,19 +57,23 @@ public class StatsDeviceLocation {
     this.sessions = sessions;
   }
 
-  public Integer getBounce_sessions() {
-    return bounce_sessions;
+  public Integer getBounceSessions() {
+    return bounceSessions;
   }
 
-  public void setBounce_sessions(Integer bounce_sessions) {
-    this.bounce_sessions = bounce_sessions;
+  public void setBounceSessions(Integer bounceSessions) {
+    this.bounceSessions = bounceSessions;
   }
 
-  public Integer getCreated() {
-    return created;
-  }
-
-  public void setCreated(Integer created) {
-    this.created = created;
+  @Override
+  public String toString() {
+    return "StatsDeviceLocation{" +
+            "dateId=" + dateId +
+            ", platformId=" + platformId +
+            ", locationId=" + locationId +
+            ", activeUsers=" + activeUsers +
+            ", sessions=" + sessions +
+            ", bounceSessions=" + bounceSessions +
+            '}';
   }
 }

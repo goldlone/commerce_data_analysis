@@ -6,7 +6,7 @@ spring:
     url: jdbc:mysql://hh:3306/report?useSSL=false&characterEncoding=utf8
     username: hive
     password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
     mode: HTML
     cache: false
