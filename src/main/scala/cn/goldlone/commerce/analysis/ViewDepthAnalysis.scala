@@ -10,11 +10,12 @@ import org.apache.spark.{SparkConf, SparkContext}
 import scala.collection.mutable
 
 /**
-  * 用户浏览深度分析
+  * 用户浏览深度分析（废弃：使用Hive运行后的结果直接使用sqoop导入Mysql）
   * 通过pv值来表示用户的浏览深度，结合用户和会话两种维度来分析数据
  *
   * @author Created by CN on 2018/12/7/0007 23:39 .
   */
+@Deprecated
 object ViewDepthAnalysis {
   
   
